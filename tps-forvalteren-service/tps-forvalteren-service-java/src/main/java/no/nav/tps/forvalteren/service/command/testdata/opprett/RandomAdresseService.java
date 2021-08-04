@@ -46,15 +46,16 @@ public class RandomAdresseService {
 
         try {
             var addrResponse = adresseServiceConsumer.getAdresser(
-
-                    new StringBuilder()
-                    .append(KOMMUNENR.equals(adresseNrInfo.getNummertype()) ?  "kommunenummer=" : "")
-                    .append(KOMMUNENR.equals(adresseNrInfo.getNummertype()) ?
-                            adresseNrInfo.getNummer() : "")
-                    .append(POSTNR.equals(adresseNrInfo.getNummertype()) ? "postnummer=" : "")
-                    .append(POSTNR.equals(adresseNrInfo.getNummertype()) ?
-                            adresseNrInfo.getNummer() : "")
-                    .toString(), total);
+                    nonNull(adresseNrInfo) && nonNull(adresseNrInfo.getNummertype()) ?
+                            new StringBuilder()
+                                    .append(KOMMUNENR.equals(adresseNrInfo.getNummertype()) ? "kommunenummer=" : "")
+                                    .append(KOMMUNENR.equals(adresseNrInfo.getNummertype()) ?
+                                            adresseNrInfo.getNummer() : "")
+                                    .append(POSTNR.equals(adresseNrInfo.getNummertype()) ? "postnummer=" : "")
+                                    .append(POSTNR.equals(adresseNrInfo.getNummertype()) ?
+                                            adresseNrInfo.getNummer() : "")
+                                    .toString() :
+                            null, total);
 
             return mapperFacade.mapAsList(addrResponse, Adresse.class);
 

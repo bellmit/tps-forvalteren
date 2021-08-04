@@ -53,7 +53,8 @@ public abstract class InnvandringSkdParameterStrategy implements SkdParametersSt
         skdMeldingTrans1.setFamilienummer(person.getIdent());
 
         skdMeldingTrans1.setSivilstand(Sivilstatus.lookup(person.getSivilstand()).getRelasjonTypeKode());
-        skdMeldingTrans1.setInnvandretFraLand(landkodeEncoder.encode(person.getLandkodeOfFirstInnvandret()));
+        String innvandretFraLand = person.getLandkodeOfFirstInnvandret();
+        skdMeldingTrans1.setInnvandretFraLand(landkodeEncoder.encode(isNotBlank(innvandretFraLand) ? innvandretFraLand : "NOR"));
 
         String yyyyMMdd = ConvertDateToString.yyyyMMdd(enforceValidTpsDate(person.getRegdato()));
         String hhMMss = ConvertDateToString.hhMMss(person.getRegdato());

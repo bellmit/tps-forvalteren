@@ -58,12 +58,13 @@ public class ExtractOpprettKriterier {
     private final MidlertidigAdresseMappingService midlertidigAdresseMappingService;
 
     public List<Person> addExtendedKriterumValuesToPerson(RsPersonBestillingKriteriumRequest req, Person hovedPerson,
-                                                          List<Person> partnere, List<Person> barn, List<Person> foreldre) {
+            List<Person> partnere, List<Person> barn, List<Person> foreldre) {
 
         List<Adresse> adresser = getAdresser(1 + partnere.size() + foreldre.size(), req.getAdresseNrInfo());
         ammendBolignr(adresser, req);
 
-        if (isBlank(req.getInnvandretFraLand())) {
+        if (isBlank(req.getInnvandretFraLand()) && !"NOR".equals(req.getStatsborgerskap())) {
+
             req.setInnvandretFraLand(isNotBlank(req.getStatsborgerskap()) ?
                     req.getStatsborgerskap() :
                     landkodeEncoder.getRandomLandTla());
@@ -212,21 +213,24 @@ public class ExtractOpprettKriterier {
 
         if (!person.isDoedFoedt()) {
 
-            person.getInnvandretUtvandret().add(
-                    InnvandretUtvandret.builder()
-                            .innutvandret(INNVANDRET)
-                            .landkode(nullcheckSetDefaultValue(person.getLandkodeOfFirstInnvandret(), hovedperson.getLandkodeOfFirstInnvandret()))
-                            .flyttedato(nullcheckSetDefaultValue(person.getFlyttedatoOfFirstInnvandret(), hovedperson.getFlyttedatoOfFirstInnvandret()))
-                            .person(person)
-                            .build()
-            );
-
             if (!FNR.name().equals(person.getIdenttype()) && person.getStatsborgerskap().isEmpty()) {
                 person.setStatsborgerskap(newArrayList(Statsborgerskap.builder()
                         .statsborgerskap(hovedperson.getStatsborgerskap().get(0).getStatsborgerskap())
                         .statsborgerskapRegdato(hentDatoFraIdentService.extract(person.getIdent()))
                         .person(person)
                         .build()));
+            }
+
+            if (person.getStatsborgerskap().stream()
+                    .anyMatch(statsborgerskap -> !"NOR".equals(statsborgerskap.getStatsborgerskap()))) {
+
+                person.getInnvandretUtvandret().add(
+                        InnvandretUtvandret.builder()
+                                .innutvandret(INNVANDRET)
+                                .landkode(nullcheckSetDefaultValue(person.getLandkodeOfFirstInnvandret(), person.getStatsborgerskap().get(0).getStatsborgerskap()))
+                                .flyttedato(nullcheckSetDefaultValue(person.getFlyttedatoOfFirstInnvandret(), hovedperson.getFlyttedatoOfFirstInnvandret()))
+                                .person(person)
+                                .build());
             }
         }
     }
@@ -247,7 +251,7 @@ public class ExtractOpprettKriterier {
     }
 
     private void mapBoadresse(Person person, Adresse adresse, LocalDateTime flyttedato, LocalDateTime gyldigTilDato,
-                              TilleggAdressetype tilleggsadresse, Boolean isDelt) {
+            TilleggAdressetype tilleggsadresse, Boolean isDelt) {
 
         if (!hasAdresse(person) || DNR.name().equals(person.getIdenttype()) || person.isUtvandret()) {
             return;
