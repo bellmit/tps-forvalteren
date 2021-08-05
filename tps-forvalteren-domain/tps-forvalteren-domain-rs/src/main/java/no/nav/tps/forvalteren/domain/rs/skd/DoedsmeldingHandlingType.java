@@ -8,6 +8,10 @@ public enum DoedsmeldingHandlingType {
 
     private String handling;
 
+    public String getHandling() {
+        return handling;
+    }
+
     DoedsmeldingHandlingType(String handling) {
         this.handling = handling;
     }

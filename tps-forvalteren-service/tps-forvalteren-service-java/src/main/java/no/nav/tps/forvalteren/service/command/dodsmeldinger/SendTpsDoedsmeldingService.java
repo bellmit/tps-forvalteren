@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import no.nav.tps.forvalteren.domain.jpa.Person;
+import no.nav.tps.forvalteren.domain.rs.skd.DoedsmeldingHandlingType;
 import no.nav.tps.forvalteren.domain.rs.skd.RsTpsDoedsmeldingRequest;
 import no.nav.tps.forvalteren.service.command.exceptions.TpsfFunctionalException;
 import no.nav.tps.forvalteren.service.command.exceptions.TpsfTechnicalException;
@@ -44,7 +45,7 @@ public class SendTpsDoedsmeldingService extends SendDodsmeldingTilTpsService {
                 sentStatus.put(miljoe, format("FEIL: %s", e.getMessage()));
             }
         }
-        return prepareStatus(sentStatus, person.getIdent());
+        return prepareStatus(sentStatus, person.getIdent(), request.getHandling());
     }
 
     private void validate(RsTpsDoedsmeldingRequest request) {
@@ -53,11 +54,11 @@ public class SendTpsDoedsmeldingService extends SendDodsmeldingTilTpsService {
         }
     }
 
-    private SendSkdMeldingTilTpsResponse prepareStatus(Map<String, String> sentStatus, String ident) {
+    private SendSkdMeldingTilTpsResponse prepareStatus(Map<String, String> sentStatus, String ident, DoedsmeldingHandlingType type) {
         sentStatus.replaceAll((env, status) -> status.matches("^00.*") ? "OK" : ExtractErrorStatus.extract(status));
         return SendSkdMeldingTilTpsResponse.builder()
                 .personId(ident)
-                .skdmeldingstype(DOEDSMELDING_MLD_NAVN)
+                .skdmeldingstype(format("%s %s", DOEDSMELDING_MLD_NAVN, type.getHandling().substring(type.getHandling().indexOf("-- "))))
                 .status(sentStatus)
                 .build();
     }

@@ -1,10 +1,12 @@
 package no.nav.tps.forvalteren.domain.rs.skd;
 
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static no.nav.tps.forvalteren.domain.rs.skd.DoedsmeldingHandlingType.D;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -35,11 +37,14 @@ public class RsTpsDoedsmeldingRequest {
     @Size(min = 2, max = 2)
     private List<String> miljoer;
 
-    public boolean validatesOk() {
-        return (nonNull(doedsdato) || handling != D) && isValidMiljoe();
+    public List<String> getMiljoer() {
+        if (isNull(miljoer)) {
+            miljoer = new ArrayList<>();
+        }
+        return miljoer;
     }
 
-    private boolean isValidMiljoe() {
-        return isNotBlank(ident) && nonNull(miljoer) && !miljoer.isEmpty();
+    public boolean validatesOk() {
+        return (nonNull(doedsdato) || handling == D) && !getMiljoer().isEmpty() && isNotBlank(ident);
     }
 }
