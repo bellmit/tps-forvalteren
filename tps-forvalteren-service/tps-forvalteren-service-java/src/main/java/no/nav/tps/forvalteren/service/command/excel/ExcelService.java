@@ -4,6 +4,7 @@ import static com.google.common.base.Charsets.UTF_8;
 import static com.google.common.collect.Lists.partition;
 import static java.lang.String.format;
 import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
+import static java.util.Objects.nonNull;
 import static no.nav.tps.forvalteren.domain.jpa.InnvandretUtvandret.InnUtvandret.INNVANDRET;
 
 import java.io.File;
@@ -180,7 +181,8 @@ public class ExcelService {
                 .append(SEP)
                 .append(person.getBoadresse().get(0).getKommunenr())
                 .append(SEP)
-                .append(person.getBoadresse().get(0).getFlyttedato().format(ISO_LOCAL_DATE))
+                .append(nonNull(person.getBoadresse().get(0).getFlyttedato()) ?
+                        person.getBoadresse().get(0).getFlyttedato().format(ISO_LOCAL_DATE) : "")
                 .toString();
     }
 }
