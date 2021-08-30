@@ -1,5 +1,21 @@
 package no.nav.tps.forvalteren.service.command.testdata.restreq;
 
+import static java.lang.String.format;
+import static java.time.LocalDateTime.now;
+import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
+import static no.nav.tps.forvalteren.domain.jpa.InnvandretUtvandret.InnUtvandret.INNVANDRET;
+import static no.nav.tps.forvalteren.domain.jpa.InnvandretUtvandret.InnUtvandret.UTVANDRET;
+import static no.nav.tps.forvalteren.domain.rs.skd.IdentType.FNR;
+import static no.nav.tps.forvalteren.service.command.testdata.restreq.OpprettPersonUtil.extractMainPerson;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+
+import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+import org.springframework.stereotype.Service;
+
 import lombok.RequiredArgsConstructor;
 import ma.glasnost.orika.MapperFacade;
 import no.nav.tps.forvalteren.common.message.MessageProvider;
@@ -11,27 +27,13 @@ import no.nav.tps.forvalteren.domain.jpa.Statsborgerskap;
 import no.nav.tps.forvalteren.domain.rs.RsPersonKriteriumRequest;
 import no.nav.tps.forvalteren.domain.rs.dolly.RsOppdaterPersonResponse;
 import no.nav.tps.forvalteren.domain.rs.dolly.RsPersonBestillingKriteriumRequest;
+import no.nav.tps.forvalteren.repository.jpa.IdenthistorikkRepository;
 import no.nav.tps.forvalteren.repository.jpa.PersonRepository;
 import no.nav.tps.forvalteren.service.command.exceptions.TpsfFunctionalException;
 import no.nav.tps.forvalteren.service.command.exceptions.TpsfTechnicalException;
 import no.nav.tps.forvalteren.service.command.testdata.opprett.OpprettPersonerOgSjekkMiljoeService;
 import no.nav.tps.forvalteren.service.command.testdata.opprett.RandomAdresseService;
 import no.nav.tps.forvalteren.service.command.testdata.utils.HentDatoFraIdentService;
-import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static java.lang.String.format;
-import static java.time.LocalDateTime.now;
-import static java.util.Objects.isNull;
-import static java.util.Objects.nonNull;
-import static no.nav.tps.forvalteren.domain.jpa.InnvandretUtvandret.InnUtvandret.INNVANDRET;
-import static no.nav.tps.forvalteren.domain.jpa.InnvandretUtvandret.InnUtvandret.UTVANDRET;
-import static no.nav.tps.forvalteren.domain.rs.skd.IdentType.FNR;
-import static no.nav.tps.forvalteren.service.command.testdata.restreq.OpprettPersonUtil.extractMainPerson;
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @Service
 @RequiredArgsConstructor
@@ -44,6 +46,7 @@ public class EndrePersonBestillingService {
     private final MapperFacade mapperFacade;
     private final MessageProvider messageProvider;
     private final OpprettPersonerOgSjekkMiljoeService opprettPersonerOgSjekkMiljoeService;
+    private final IdenthistorikkRepository identhistorikkRepository;
 
     public RsOppdaterPersonResponse execute(String ident, RsPersonBestillingKriteriumRequest request) {
 
@@ -86,10 +89,34 @@ public class EndrePersonBestillingService {
         RsPersonKriteriumRequest personKriterier = extractMainPerson(request);
         try {
             Person nyPerson = opprettPersonerOgSjekkMiljoeService.createNyeIdenter(personKriterier).get(0);
-            nyPerson.getIdentHistorikk().add(IdentHistorikk.builder()
+
+            var eksisterendeHistorikk = person.getIdentHistorikk().stream()
+                    .map(historikk -> IdentHistorikk.builder()
+                            .person(nyPerson)
+                            .aliasPerson(historikk.getAliasPerson())
+                            .historicIdentOrder(1)
+                            .regdato(LocalDateTime.now())
+                            .build())
+                    .collect(Collectors.toList());
+
+            identhistorikkRepository.deleteByIdIn(person.getIdentHistorikk().stream()
+                    .map(IdentHistorikk::getPerson)
+                    .map(Person::getIdentHistorikk)
+                    .flatMap(Collection::stream)
+                    .map(IdentHistorikk::getId)
+                    .collect(Collectors.toList()));
+            identhistorikkRepository.deleteByIdIn(eksisterendeHistorikk.stream()
+                    .map(IdentHistorikk::getAliasPerson)
+                    .map(Person::getIdentHistorikk)
+                    .flatMap(Collection::stream)
+                    .map(IdentHistorikk::getId)
+                    .collect(Collectors.toList()));
+
+            nyPerson.getIdentHistorikk().addAll(eksisterendeHistorikk);
+            nyPerson.getIdentHistorikk().add(0, IdentHistorikk.builder()
                     .person(nyPerson)
                     .aliasPerson(person)
-                    .historicIdentOrder(1)
+                    .historicIdentOrder(eksisterendeHistorikk.size() + 1)
                     .regdato(LocalDateTime.now())
                     .build());
 
