@@ -63,7 +63,7 @@ public class LagreTilTpsService {
         Map<String, String> envNotFoundMap = new HashMap();
 
         Set<String> safeEnvironments = Sets.newHashSet(environments);
-//        safeEnvironments.remove("q4"); // Miljø som ikke skal sendes til TPS ...
+        safeEnvironments.remove("q4"); // Miljø som ikke skal sendes til TPS ...
 
         Iterator<String> it = safeEnvironments.iterator();
         while (it.hasNext()) {
@@ -102,15 +102,15 @@ public class LagreTilTpsService {
 
         List skdMldResponse = new ArrayList();
 
-//        if (environments.contains("q4")) { // Status på miljoer som ikke skal sendes til TPS
-//            var synthMiljoer = Map.of("q4", "OK");
-//
-//            skdMldResponse.add(SendSkdMeldingTilTpsResponse.builder()
-//                            .personId(personerIGruppen.get(0).getIdent())
-//                            .skdmeldingstype("TPS i dette miljø blir nå oppdatert via PDL")
-//                            .status(synthMiljoer)
-//                            .build());
-//        }
+        if (environments.contains("q4")) { // Status på miljoer som ikke skal sendes til TPS
+            var synthMiljoer = Map.of("q4", "OK");
+
+            skdMldResponse.add(SendSkdMeldingTilTpsResponse.builder()
+                            .personId(personerIGruppen.get(0).getIdent())
+                            .skdmeldingstype("TPS i dette miljø blir nå oppdatert via PDL")
+                            .status(synthMiljoer)
+                            .build());
+        }
 
         skdMldResponse.addAll(envNotFound.values());
         skdMldResponse.addAll(innvandringCreateResponse.values());
