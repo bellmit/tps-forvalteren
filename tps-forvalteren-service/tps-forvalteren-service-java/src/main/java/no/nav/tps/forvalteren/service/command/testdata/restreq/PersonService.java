@@ -22,7 +22,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.tps.forvalteren.domain.jpa.Fullmakt;
 import no.nav.tps.forvalteren.domain.jpa.IdentHistorikk;
-import no.nav.tps.forvalteren.domain.jpa.InnvandretUtvandret;
 import no.nav.tps.forvalteren.domain.jpa.Person;
 import no.nav.tps.forvalteren.domain.jpa.Relasjon;
 import no.nav.tps.forvalteren.domain.jpa.Vergemaal;
@@ -52,15 +51,6 @@ public class PersonService {
         for (List<String> subset : identLists) {
             resultat.addAll(personRepository.findByIdentIn(subset));
         }
-        resultat.forEach(person -> {
-            if ("UTVA".equals(person.getPersonStatus())) {
-                person.setBoadresse(null);
-                if ("XUK".equals(person.getInnvandretUtvandret().stream()
-                        .findFirst().orElse(new InnvandretUtvandret()).getLandkode())) {
-                    person.setPostadresse(null);
-                }
-            }
-        });
         return resultat;
     }
 
