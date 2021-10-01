@@ -3,6 +3,8 @@ package no.nav.tps.forvalteren.consumer.rs.identpool;
 import java.net.URI;
 import java.util.List;
 import java.util.Set;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.RequestEntity;
@@ -11,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 
 import no.nav.tps.forvalteren.consumer.rs.identpool.dao.IdentpoolNewIdentsRequest;
 
+@Slf4j
 public class IdentpoolConsumer {
 
     private static final String REKVIRERT_AV = "rekvirertAv";
@@ -35,9 +38,12 @@ public class IdentpoolConsumer {
 
     public ResponseEntity requestRandomIdents(IdentpoolNewIdentsRequest request) {
 
-        return restTemplate.exchange(RequestEntity.post(
-                URI.create(identpoolHost + IDENTPOOL_ROOT_URL))
-                .body(request), String[].class);
+        RequestEntity<IdentpoolNewIdentsRequest> requestEntity = RequestEntity.post(
+                        URI.create(identpoolHost + IDENTPOOL_ROOT_URL))
+                .body(request);
+        log.info("Sender random ident request til Ident-Pool med body: {}", requestEntity.getBody());
+
+        return restTemplate.exchange(requestEntity, String[].class);
     }
 
     public ResponseEntity requestSpecificIdents(List<String> idents) {
