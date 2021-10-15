@@ -120,7 +120,7 @@ public class ExtractOpprettKriterier {
 
             if (foreldre.get(i).isNyPerson() && hasAdresse(foreldre.get(i))) {
                 mapBoadresse(foreldre.get(i), adresser.get(isTrue(foreldreRequest.getHarFellesAdresse()) ? 0 : i % adresser.size()),
-                        extractFlyttedato(foreldreRequest.getBoadresse()), req.getBoadresse().getGyldigTilDato(),
+                        extractFlyttedato(foreldreRequest.getBoadresse()), null,
                         extractTilleggsadresse(foreldreRequest.getBoadresse()), null);
             }
             alignStatsborgerskapAndInnvandretFraLand(foreldre.get(i), hovedPerson);
