@@ -224,11 +224,12 @@ public class ExtractOpprettKriterier {
             if (person.getStatsborgerskap().stream()
                     .anyMatch(statsborgerskap -> !"NOR".equals(statsborgerskap.getStatsborgerskap()))) {
 
+                var flyttedato = nullcheckSetDefaultValue(person.getFlyttedatoOfFirstInnvandret(), hovedperson.getFlyttedatoOfFirstInnvandret());
                 person.getInnvandretUtvandret().add(
                         InnvandretUtvandret.builder()
                                 .innutvandret(INNVANDRET)
                                 .landkode(nullcheckSetDefaultValue(person.getLandkodeOfFirstInnvandret(), person.getStatsborgerskap().get(0).getStatsborgerskap()))
-                                .flyttedato(nullcheckSetDefaultValue(person.getFlyttedatoOfFirstInnvandret(), hovedperson.getFlyttedatoOfFirstInnvandret()))
+                                .flyttedato(nullcheckSetDefaultValue(flyttedato, hentDatoFraIdentService.extract(person.getIdent())))
                                 .person(person)
                                 .build());
             }
