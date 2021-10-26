@@ -1,21 +1,21 @@
 package no.nav.tps.forvalteren.domain.rs;
 
+import static java.util.Objects.isNull;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import com.fasterxml.jackson.annotation.JsonInclude;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import no.nav.tps.forvalteren.domain.jpa.InnvandretUtvandret;
 import no.nav.tps.forvalteren.domain.jpa.Statsborgerskap;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
-import static java.util.Objects.isNull;
 
 @Getter
 @Setter
@@ -84,14 +84,14 @@ public class RsPerson {
     private LocalDateTime egenAnsattDatoTom;
 
     @Size(min = 4, max = 4)
-    private String typeSikkerhetsTiltak;
+    private String typeSikkerhetTiltak;
 
-    private LocalDateTime sikkerhetsTiltakDatoFom;
+    private LocalDateTime sikkerhetTiltakDatoFom;
 
-    private LocalDateTime sikkerhetsTiltakDatoTom;
+    private LocalDateTime sikkerhetTiltakDatoTom;
 
     @Size(min = 1, max = 50)
-    private String beskrSikkerhetsTiltak;
+    private String beskrSikkerhetTiltak;
 
     private LocalDateTime foedselsdato;
 
