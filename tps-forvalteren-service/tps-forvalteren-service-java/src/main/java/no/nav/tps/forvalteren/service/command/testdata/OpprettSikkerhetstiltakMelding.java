@@ -33,7 +33,7 @@ public class OpprettSikkerhetstiltakMelding {
                             .offentligIdent(person.getIdent())
                             .build(), environment));
 
-                    person.setBeskrSikkerhetTiltak(null);
+                    person.setTypeSikkerhetTiltak(null);
                     person.setBeskrSikkerhetTiltak(null);
                     person.setSikkerhetTiltakDatoFom(null);
                     person.setSikkerhetTiltakDatoTom(null);
