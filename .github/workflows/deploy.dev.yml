@@ -2,7 +2,9 @@ name: Deploy dev u2
 
 on:
   push:
-    branches: master
+    branches:
+      - master
+      - feature/tpsf_legge_til_sikkerhetstiltak
 
 env:
   IMAGE: docker.pkg.github.com/${{ github.repository }}/tps-forvalteren:${{ github.sha }}
