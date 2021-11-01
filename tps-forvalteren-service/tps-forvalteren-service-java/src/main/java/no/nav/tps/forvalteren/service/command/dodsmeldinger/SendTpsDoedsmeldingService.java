@@ -6,7 +6,6 @@ import static no.nav.tps.forvalteren.domain.service.tps.servicerutiner.definitio
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import no.nav.tps.forvalteren.domain.jpa.Person;
@@ -16,21 +15,18 @@ import no.nav.tps.forvalteren.service.command.exceptions.TpsfFunctionalException
 import no.nav.tps.forvalteren.service.command.exceptions.TpsfTechnicalException;
 import no.nav.tps.forvalteren.service.command.testdata.response.lagretiltps.SendSkdMeldingTilTpsResponse;
 import no.nav.tps.forvalteren.service.command.testdata.utils.ExtractErrorStatus;
-import no.nav.tps.forvalteren.service.command.testdata.utils.HentIdenttypeFraIdentService;
+import no.nav.tps.forvalteren.service.command.testdata.utils.IdenttypeFraIdentUtil;
 import no.nav.tps.xjc.ctg.domain.s004.PersondataFraTpsS004;
 
 @Service
 public class SendTpsDoedsmeldingService extends SendDodsmeldingTilTpsService {
-
-    @Autowired
-    private HentIdenttypeFraIdentService hentIdenttypeFraIdentService;
 
     public SendSkdMeldingTilTpsResponse sendDoedsmelding(RsTpsDoedsmeldingRequest request) {
         validate(request);
 
         Person person = new Person();
         person.setIdent(request.getIdent());
-        person.setIdenttype(hentIdenttypeFraIdentService.execute(request.getIdent()));
+        person.setIdenttype(IdenttypeFraIdentUtil.getIdenttype(request.getIdent()));
         person.setRegdato(LocalDateTime.now());
 
         Map<String, String> sentStatus = new HashMap<>(request.getMiljoer().size());

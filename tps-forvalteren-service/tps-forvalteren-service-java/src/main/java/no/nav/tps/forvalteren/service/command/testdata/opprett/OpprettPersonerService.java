@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 import no.nav.tps.forvalteren.domain.jpa.Person;
 import no.nav.tps.forvalteren.domain.rs.skd.KjoennType;
 import no.nav.tps.forvalteren.service.command.testdata.opprett.OpprettPersonerOgSjekkMiljoeService.IdentKjonnTuple;
-import no.nav.tps.forvalteren.service.command.testdata.utils.HentIdenttypeFraIdentService;
+import no.nav.tps.forvalteren.service.command.testdata.utils.IdenttypeFraIdentUtil;
 import no.nav.tps.forvalteren.service.command.testdata.utils.HentKjoennFraIdentService;
 
 @Service
@@ -22,7 +22,6 @@ import no.nav.tps.forvalteren.service.command.testdata.utils.HentKjoennFraIdentS
 public class OpprettPersonerService {
 
     private final HentKjoennFraIdentService hentKjoennFraIdentService;
-    private final HentIdenttypeFraIdentService hentIdenttypeFraIdentService;
 
     public List<Person> execute(Collection<String> tilgjengeligIdenter) {
         return opprettMedEksplisittKjoenn(tilgjengeligIdenter.stream()
@@ -39,7 +38,7 @@ public class OpprettPersonerService {
         tilgjengeligIdenter.forEach(tuple -> {
             Person person = Person.builder()
                     .ident(tuple.getIdent())
-                    .identtype(hentIdenttypeFraIdentService.execute(tuple.getIdent()))
+                    .identtype(IdenttypeFraIdentUtil.getIdenttype(tuple.getIdent()))
                     .kjonn(getKjonn(tuple))
                     .regdato(now())
                     .opprettetDato(now())

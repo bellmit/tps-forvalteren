@@ -23,7 +23,7 @@ import no.nav.tps.forvalteren.service.command.testdata.opprett.PersonNameService
 import no.nav.tps.forvalteren.service.command.testdata.opprett.RandomAdresseService;
 import no.nav.tps.forvalteren.service.command.testdata.opprett.TestdataIdenterFetcher;
 import no.nav.tps.forvalteren.service.command.testdata.opprett.TestdataRequest;
-import no.nav.tps.forvalteren.service.command.testdata.utils.HentIdenttypeFraIdentService;
+import no.nav.tps.forvalteren.service.command.testdata.utils.IdenttypeFraIdentUtil;
 
 @Service
 public class OpprettPersonMedEksisterendeForeldreService {
@@ -42,9 +42,6 @@ public class OpprettPersonMedEksisterendeForeldreService {
 
     @Autowired
     private RandomAdresseService randomAdresseOnPerson;
-
-    @Autowired
-    private HentIdenttypeFraIdentService hentIdenttypeFraIdentService;
 
     public Person execute(RsTpsFoedselsmeldingRequest request) {
 
@@ -87,7 +84,7 @@ public class OpprettPersonMedEksisterendeForeldreService {
                 .person(hovedperson)
                 .personRelasjonMed(Person.builder()
                         .ident(identRelasjon)
-                        .identtype(hentIdenttypeFraIdentService.execute(identRelasjon))
+                        .identtype(IdenttypeFraIdentUtil.getIdenttype(identRelasjon))
                         .build()
                 )
                 .relasjonTypeNavn(relasjonType.name())

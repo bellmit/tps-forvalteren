@@ -34,7 +34,7 @@ public class PersonKriteriumMappingStrategyTest {
     private static final String IDENTTYPE = FNR.name();
     private static final String SPESREG = "KODE6";
 
-    private MapperFacade mapper;
+    private MapperFacade mapperFacade;
 
     @Mock
     private DummyAdresseService dummyAdresseService;
@@ -50,7 +50,7 @@ public class PersonKriteriumMappingStrategyTest {
 
     @Before
     public void setup() {
-        mapper = MapperTestUtils.createMapperFacadeForMappingStrategy(personKriteriumMappingStrategy);
+        mapperFacade = MapperTestUtils.createMapperFacadeForMappingStrategy(personKriteriumMappingStrategy);
     }
 
     @Test
@@ -70,7 +70,8 @@ public class PersonKriteriumMappingStrategyTest {
         bestilling.setEgenAnsattDatoFom(TIMENOW);
         bestilling.setEgenAnsattDatoTom(TIMENOW);
 
-        Person person = mapper.map(bestilling, Person.class);
+        var person = Person.builder().ident("01020312345").build();
+        mapperFacade.map(bestilling, person);
 
         assertThat(person.getIdenttype(), is(equalTo(IDENTTYPE)));
         assertThat(person.getStatsborgerskap().get(0).getStatsborgerskap(), is(equalTo(STATSBORGERSKAP)));

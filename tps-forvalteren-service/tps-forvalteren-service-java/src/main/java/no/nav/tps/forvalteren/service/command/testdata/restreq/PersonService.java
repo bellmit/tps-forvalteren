@@ -2,9 +2,11 @@ package no.nav.tps.forvalteren.service.command.testdata.restreq;
 
 import static com.google.common.collect.Lists.partition;
 import static java.util.Collections.singletonList;
+import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
+import static no.nav.tps.forvalteren.domain.jpa.InnvandretUtvandret.InnUtvandret.UTVANDRET;
 import static no.nav.tps.forvalteren.service.command.testdata.utils.TestdataConstants.ORACLE_MAX_IN_SET_ELEMENTS;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -22,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.nav.tps.forvalteren.domain.jpa.Fullmakt;
 import no.nav.tps.forvalteren.domain.jpa.IdentHistorikk;
+import no.nav.tps.forvalteren.domain.jpa.InnvandretUtvandret;
 import no.nav.tps.forvalteren.domain.jpa.Person;
 import no.nav.tps.forvalteren.domain.jpa.Relasjon;
 import no.nav.tps.forvalteren.domain.jpa.Vergemaal;
@@ -46,12 +49,48 @@ public class PersonService {
     public List<Person> getPersonerByIdenter(List<String> identer) {
 
         //Begrenser maks antall identer i SQL spørring
-        List<List<String>> identLists = partition(identer, ORACLE_MAX_IN_SET_ELEMENTS);
-        List<Person> resultat = new ArrayList<>(identer.size());
-        for (List<String> subset : identLists) {
-            resultat.addAll(personRepository.findByIdentIn(subset));
+        var personer = partition(identer, ORACLE_MAX_IN_SET_ELEMENTS).stream()
+                .map(personRepository::findByIdentIn)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+
+        personer.forEach(person -> {
+            if (isNull(person.getPersonStatus())) {
+                person.setPersonStatus(getPersonStatus(person));
+            }
+        });
+
+        return personer;
+    }
+
+    private String getPersonStatus(Person person) {
+
+        if (nonNull(person.getDoedsdato())) {
+            return "FDAT".equals(person.getIdenttype()) || "FNR".equals(person.getIdenttype()) ? "DØD" : "DØDD";
+
+        } else if ("DNR".equals(person.getIdent())) {
+            return "ADNR";
+
+        } else if ("BOST".equals(person.getIdent())) {
+            return "ABNR";
+
+        } else if (nonNull(person.getForsvunnetDato())) {
+            return "FOSV";
+
+        } else if (UTVANDRET.equals(person.getInnvandretUtvandret().stream()
+                .findFirst().orElse(new InnvandretUtvandret())
+                .getInnutvandret())) {
+            return "UTVA";
+
+        } else if (!person.getBoadresse().isEmpty()) {
+            return "BOSA";
+
+        } else if ("FNR".equals(person.getIdenttype())) {
+            return "FØDR";
+
+        } else {
+            return "UREG";
         }
-        return resultat;
     }
 
     public void deletePerson(List<String> miljoer, String ident) {
@@ -97,29 +136,29 @@ public class PersonService {
         return includeRelatedPeople ?
 
                 Stream.of(
-                persons,
-                persons.stream()
-                        .map(Person::getRelasjoner)
+                        persons,
+                        persons.stream()
+                                .map(Person::getRelasjoner)
+                                .flatMap(Collection::stream)
+                                .map(Relasjon::getPersonRelasjonMed)
+                                .collect(Collectors.toSet()),
+                        persons.stream()
+                                .map(Person::getIdentHistorikk)
+                                .flatMap(Collection::stream)
+                                .map(IdentHistorikk::getAliasPerson)
+                                .collect(Collectors.toSet()),
+                        persons.stream()
+                                .map(Person::getFullmakt)
+                                .flatMap(Collection::stream)
+                                .map(Fullmakt::getFullmektig)
+                                .collect(Collectors.toSet()),
+                        persons.stream()
+                                .map(Person::getVergemaal)
+                                .flatMap(Collection::stream)
+                                .map(Vergemaal::getVerge)
+                                .collect(Collectors.toSet()))
                         .flatMap(Collection::stream)
-                        .map(Relasjon::getPersonRelasjonMed)
-                        .collect(Collectors.toSet()),
-                persons.stream()
-                        .map(Person::getIdentHistorikk)
-                        .flatMap(Collection::stream)
-                        .map(IdentHistorikk::getAliasPerson)
-                        .collect(Collectors.toSet()),
-                persons.stream()
-                        .map(Person::getFullmakt)
-                        .flatMap(Collection::stream)
-                        .map(Fullmakt::getFullmektig)
-                        .collect(Collectors.toSet()),
-                persons.stream()
-                        .map(Person::getVergemaal)
-                        .flatMap(Collection::stream)
-                        .map(Vergemaal::getVerge)
-                        .collect(Collectors.toSet()))
-                .flatMap(Collection::stream)
-                .collect(Collectors.toSet()) :
+                        .collect(Collectors.toSet()) :
 
                 new HashSet<>(persons);
     }

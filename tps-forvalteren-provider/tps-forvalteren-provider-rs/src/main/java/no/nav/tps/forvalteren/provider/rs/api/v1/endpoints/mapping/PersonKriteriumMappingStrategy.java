@@ -277,13 +277,13 @@ public class PersonKriteriumMappingStrategy implements MappingStrategy {
     private static IdentpoolKjoenn extractKjoenn(KjoennType kjoenn) {
 
         switch (kjoenn) {
-            case K:
-                return KVINNE;
-            case M:
-                return MANN;
-            case U:
-            default:
-                return null;
+        case K:
+            return KVINNE;
+        case M:
+            return MANN;
+        case U:
+        default:
+            return null;
         }
     }
 

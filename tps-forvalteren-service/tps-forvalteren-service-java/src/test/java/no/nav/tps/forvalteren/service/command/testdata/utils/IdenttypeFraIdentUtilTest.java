@@ -6,36 +6,32 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class HentIdenttypeFraIdentServiceTest {
+public class IdenttypeFraIdentUtilTest {
 
     private static final String IDENT_FNR = "12031212345";
     private static final String IDENT_DNR = "52031212345";
     private static final String IDENT_BOST = "12231212345";
 
-    @InjectMocks
-    private HentIdenttypeFraIdentService hentIdenttypeFraIdentService;
-
     @Test
     public void hentIdentTypeFnr() {
-        String result = hentIdenttypeFraIdentService.execute(IDENT_FNR);
+        String result = IdenttypeFraIdentUtil.getIdenttype(IDENT_FNR);
 
         assertThat(result, is(equalTo("FNR")));
     }
 
     @Test
     public void hentIdentTypeDnr() {
-        String result = hentIdenttypeFraIdentService.execute(IDENT_DNR);
+        String result = IdenttypeFraIdentUtil.getIdenttype(IDENT_DNR);
 
         assertThat(result, is(equalTo("DNR")));
     }
 
     @Test
     public void hentIdentTypeBost() {
-        String result = hentIdenttypeFraIdentService.execute(IDENT_BOST);
+        String result = IdenttypeFraIdentUtil.getIdenttype(IDENT_BOST);
 
         assertThat(result, is(equalTo("BOST")));
     }

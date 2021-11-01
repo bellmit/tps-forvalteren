@@ -23,7 +23,6 @@ import no.nav.tps.forvalteren.service.command.testdata.opprett.OpprettPersonerSe
 import no.nav.tps.forvalteren.service.command.testdata.opprett.PersonNameService;
 import no.nav.tps.forvalteren.service.command.testdata.opprett.RandomAdresseService;
 import no.nav.tps.forvalteren.service.command.testdata.opprett.TestdataIdenterFetcher;
-import no.nav.tps.forvalteren.service.command.testdata.utils.HentIdenttypeFraIdentService;
 
 @RunWith(MockitoJUnitRunner.class)
 public class OpprettPersonMedEksisterendeForeldreServiceTest {
@@ -46,9 +45,6 @@ public class OpprettPersonMedEksisterendeForeldreServiceTest {
     @Mock
     private RandomAdresseService randomAdresseOnPerson;
 
-    @Mock
-    private HentIdenttypeFraIdentService hentIdenttypeFraIdentService;
-
     @InjectMocks
     private OpprettPersonMedEksisterendeForeldreService opprettPersonService;
 
@@ -60,7 +56,7 @@ public class OpprettPersonMedEksisterendeForeldreServiceTest {
     }
 
     @Test
-    public void genererPersonMedRelasjonOK() throws Exception {
+    public void genererPersonMedRelasjonOK() {
 
         rsTpsFoedselsmeldingRequest = RsTpsFoedselsmeldingRequest.builder()
                 .foedselsdato(LocalDateTime.now())

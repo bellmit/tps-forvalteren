@@ -6,12 +6,12 @@ import static no.nav.tps.forvalteren.domain.rs.skd.IdentType.DNR;
 import static no.nav.tps.forvalteren.domain.rs.skd.IdentType.FDAT;
 import static no.nav.tps.forvalteren.domain.rs.skd.IdentType.FNR;
 
-import org.springframework.stereotype.Component;
+import lombok.experimental.UtilityClass;
 
-@Component
-public class HentIdenttypeFraIdentService {
+@UtilityClass
+public class IdenttypeFraIdentUtil {
 
-    public String execute(String ident) {
+    public String getIdenttype(String ident) {
 
         if (parseInt(ident.substring(6, 10)) == 0) {
             return FDAT.name();
