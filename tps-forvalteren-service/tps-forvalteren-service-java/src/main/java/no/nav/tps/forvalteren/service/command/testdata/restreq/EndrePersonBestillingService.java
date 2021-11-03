@@ -21,6 +21,7 @@ import ma.glasnost.orika.MapperFacade;
 import no.nav.tps.forvalteren.common.message.MessageProvider;
 import no.nav.tps.forvalteren.domain.jpa.Adresse;
 import no.nav.tps.forvalteren.domain.jpa.IdentHistorikk;
+import no.nav.tps.forvalteren.domain.jpa.InnvandretUtvandret;
 import no.nav.tps.forvalteren.domain.jpa.Person;
 import no.nav.tps.forvalteren.domain.jpa.Relasjon;
 import no.nav.tps.forvalteren.domain.jpa.Statsborgerskap;
@@ -148,15 +149,18 @@ public class EndrePersonBestillingService {
             throw new TpsfFunctionalException(messageProvider.get("endre.person.innutvandring.validation.identtype"));
         }
 
-        if (isNotBlank(request.getInnvandretFraLand()) && INNVANDRET == person.getInnvandretUtvandret().get(0).getInnutvandret() ||
-                isNotBlank(request.getUtvandretTilLand()) && UTVANDRET == person.getInnvandretUtvandret().get(0).getInnutvandret()) {
+        if (isNotBlank(request.getInnvandretFraLand()) && INNVANDRET == person.getInnvandretUtvandret().stream()
+                .findFirst().orElse(new InnvandretUtvandret()).getInnutvandret() ||
+                isNotBlank(request.getUtvandretTilLand()) && UTVANDRET == person.getInnvandretUtvandret().stream()
+                        .findFirst().orElse(new InnvandretUtvandret()).getInnutvandret()) {
             throw new TpsfFunctionalException(messageProvider.get("endre.person.innutvandring.validation.samme.aksjon"));
         }
 
-        if (nonNull(request.getInnvandretFraLandFlyttedato()) &&
-                request.getInnvandretFraLandFlyttedato().isBefore(person.getInnvandretUtvandret().get(0).getFlyttedato()) ||
+        if (nonNull(request.getInnvandretFraLandFlyttedato()) && nonNull(person.getInnvandretUtvandret().stream()
+            .findFirst().orElse(new InnvandretUtvandret()).getFlyttedato()) &&
+                (request.getInnvandretFraLandFlyttedato().isBefore(person.getInnvandretUtvandret().get(0).getFlyttedato()) ||
                 nonNull(request.getUtvandretTilLandFlyttedato()) &&
-                        request.getUtvandretTilLandFlyttedato().isBefore(person.getInnvandretUtvandret().get(0).getFlyttedato())) {
+                        request.getUtvandretTilLandFlyttedato().isBefore(person.getInnvandretUtvandret().get(0).getFlyttedato()))) {
 
             throw new TpsfFunctionalException(messageProvider.get("endre.person.innutvandring.validation.flyttedato"));
         }
