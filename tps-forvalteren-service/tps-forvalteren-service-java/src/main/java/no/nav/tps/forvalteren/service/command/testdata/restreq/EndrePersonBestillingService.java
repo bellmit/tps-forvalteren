@@ -156,12 +156,12 @@ public class EndrePersonBestillingService {
             throw new TpsfFunctionalException(messageProvider.get("endre.person.innutvandring.validation.samme.aksjon"));
         }
 
-        if (nonNull(request.getInnvandretFraLandFlyttedato()) && nonNull(person.getInnvandretUtvandret().stream()
-            .findFirst().orElse(new InnvandretUtvandret()).getFlyttedato()) &&
-                (request.getInnvandretFraLandFlyttedato().isBefore(person.getInnvandretUtvandret().get(0).getFlyttedato()) ||
+        if (nonNull(request.getInnvandretFraLandFlyttedato()) &&
+                request.getInnvandretFraLandFlyttedato().isBefore(person.getInnvandretUtvandret().stream()
+                        .findFirst().orElse(new InnvandretUtvandret()).getFlyttedato()) ||
                 nonNull(request.getUtvandretTilLandFlyttedato()) &&
-                        request.getUtvandretTilLandFlyttedato().isBefore(person.getInnvandretUtvandret().get(0).getFlyttedato()))) {
-
+                        request.getUtvandretTilLandFlyttedato().isBefore(person.getInnvandretUtvandret().stream()
+                                .findFirst().orElse(new InnvandretUtvandret()).getFlyttedato())) {
             throw new TpsfFunctionalException(messageProvider.get("endre.person.innutvandring.validation.flyttedato"));
         }
     }
