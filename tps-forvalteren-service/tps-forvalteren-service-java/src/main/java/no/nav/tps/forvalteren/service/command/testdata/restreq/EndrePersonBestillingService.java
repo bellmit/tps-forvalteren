@@ -229,8 +229,12 @@ public class EndrePersonBestillingService {
 
         if (request.hasNyttNavn()) {
 
-            person.setFornavn(PersonNameService.getRandomFornavn());
-            person.setEtternavn(PersonNameService.getRandomEtternavn());
+            String randomFornavn = PersonNameService.getRandomFornavn();
+            String randomEtternavn = PersonNameService.getRandomEtternavn();
+
+            person.setFornavn(randomFornavn);
+            person.setEtternavn(randomEtternavn);
+            person.setForkortetNavn(randomEtternavn + " " + randomFornavn);
         }
     }
 }
