@@ -229,8 +229,8 @@ public class EndrePersonBestillingService {
 
         if (request.hasNyttNavn()) {
 
-            String randomFornavn = PersonNameService.getRandomFornavn();
-            String randomEtternavn = PersonNameService.getRandomEtternavn();
+            String randomFornavn = PersonNameService.getRandomFornavn().toUpperCase();
+            String randomEtternavn = PersonNameService.getRandomEtternavn().toUpperCase();
 
             person.setFornavn(randomFornavn);
             person.setEtternavn(randomEtternavn);
