@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - master
-      - feature/bestille-nytt-navn
 
 env:
   IMAGE: docker.pkg.github.com/${{ github.repository }}/tps-forvalteren:${{ github.sha }}
