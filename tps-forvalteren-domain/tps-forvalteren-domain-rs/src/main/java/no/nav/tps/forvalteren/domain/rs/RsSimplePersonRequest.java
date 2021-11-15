@@ -71,6 +71,8 @@ public class RsSimplePersonRequest {
 
     protected Boolean harMellomnavn;
 
+    protected Boolean harNyttNavn;
+
     private String innvandretFraLand;
 
     private LocalDateTime innvandretFraLandFlyttedato;
@@ -132,5 +134,10 @@ public class RsSimplePersonRequest {
     @JsonIgnore
     public boolean hasMellomnavn() {
         return isTrue(getHarMellomnavn());
+    }
+
+    @JsonIgnore
+    public boolean hasNyttNavn() {
+        return isTrue(getHarNyttNavn());
     }
 }

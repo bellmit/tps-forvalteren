@@ -1,21 +1,5 @@
 package no.nav.tps.forvalteren.service.command.testdata.restreq;
 
-import static java.lang.String.format;
-import static java.time.LocalDateTime.now;
-import static java.util.Objects.isNull;
-import static java.util.Objects.nonNull;
-import static no.nav.tps.forvalteren.domain.jpa.InnvandretUtvandret.InnUtvandret.INNVANDRET;
-import static no.nav.tps.forvalteren.domain.jpa.InnvandretUtvandret.InnUtvandret.UTVANDRET;
-import static no.nav.tps.forvalteren.domain.rs.skd.IdentType.FNR;
-import static no.nav.tps.forvalteren.service.command.testdata.restreq.OpprettPersonUtil.extractMainPerson;
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
-
-import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
-import org.springframework.stereotype.Service;
-
 import lombok.RequiredArgsConstructor;
 import ma.glasnost.orika.MapperFacade;
 import no.nav.tps.forvalteren.common.message.MessageProvider;
@@ -33,8 +17,25 @@ import no.nav.tps.forvalteren.repository.jpa.PersonRepository;
 import no.nav.tps.forvalteren.service.command.exceptions.TpsfFunctionalException;
 import no.nav.tps.forvalteren.service.command.exceptions.TpsfTechnicalException;
 import no.nav.tps.forvalteren.service.command.testdata.opprett.OpprettPersonerOgSjekkMiljoeService;
+import no.nav.tps.forvalteren.service.command.testdata.opprett.PersonNameService;
 import no.nav.tps.forvalteren.service.command.testdata.opprett.RandomAdresseService;
 import no.nav.tps.forvalteren.service.command.testdata.utils.HentDatoFraIdentService;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static java.lang.String.format;
+import static java.time.LocalDateTime.now;
+import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
+import static no.nav.tps.forvalteren.domain.jpa.InnvandretUtvandret.InnUtvandret.INNVANDRET;
+import static no.nav.tps.forvalteren.domain.jpa.InnvandretUtvandret.InnUtvandret.UTVANDRET;
+import static no.nav.tps.forvalteren.domain.rs.skd.IdentType.FNR;
+import static no.nav.tps.forvalteren.service.command.testdata.restreq.OpprettPersonUtil.extractMainPerson;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @Service
 @RequiredArgsConstructor
@@ -66,6 +67,7 @@ public class EndrePersonBestillingService {
 
         updateAdresse(request, person);
         updateStatsborgerskap(request, person);
+        updateNavn(request, person);
 
         relasjonNyePersonerBestillingService.makeRelasjoner(request, person)
                 .stream().map(Person::getIdent).collect(Collectors.toList());
@@ -220,6 +222,19 @@ public class EndrePersonBestillingService {
             person.getStatsborgerskap().stream()
                     .reduce(((statsborgerskap, statsborgerskap2) -> statsborgerskap2)).get()
                     .setStatsborgerskapRegdato(now());
+        }
+    }
+
+    private static void updateNavn(RsPersonBestillingKriteriumRequest request, Person person) {
+
+        if (request.hasNyttNavn()) {
+
+            String randomFornavn = PersonNameService.getRandomFornavn().toUpperCase();
+            String randomEtternavn = PersonNameService.getRandomEtternavn().toUpperCase();
+
+            person.setFornavn(randomFornavn);
+            person.setEtternavn(randomEtternavn);
+            person.setForkortetNavn(randomEtternavn + " " + randomFornavn);
         }
     }
 }
