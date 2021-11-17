@@ -237,7 +237,7 @@ public class PersonKriteriumMappingStrategy implements MappingStrategy {
 
         if (DNR.name().equals(person.getIdenttype())) {
             person.setBoadresse(null);
-            if (kriteriumRequest.getPostadresse().isEmpty() && kriteriumRequest.isIngenAdresse()) {
+            if (kriteriumRequest.getPostadresse().isEmpty() && !kriteriumRequest.isIngenAdresse()) {
                 person.getPostadresse().clear();
                 person.getPostadresse().add(dummyAdresseService.createDummyPostAdresseUtland(person));
             }
