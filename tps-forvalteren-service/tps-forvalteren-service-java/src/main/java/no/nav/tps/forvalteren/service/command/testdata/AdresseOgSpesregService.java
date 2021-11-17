@@ -1,17 +1,16 @@
 package no.nav.tps.forvalteren.service.command.testdata;
 
-import static no.nav.tps.forvalteren.domain.rs.skd.IdentType.DNR;
-import static no.nav.tps.forvalteren.domain.service.DiskresjonskoderType.UFB;
-import static no.nav.tps.forvalteren.service.command.testdata.opprett.DummyAdresseService.SPSF_ADR;
-import static no.nav.tps.forvalteren.service.command.tps.skdmelding.skdparam.utils.NullcheckUtil.nullcheckSetDefaultValue;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import no.nav.tps.forvalteren.domain.jpa.Adresse;
 import no.nav.tps.forvalteren.domain.jpa.Person;
 import no.nav.tps.forvalteren.service.command.testdata.opprett.DummyAdresseService;
 import no.nav.tps.forvalteren.service.command.testdata.utils.HentDatoFraIdentService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import static no.nav.tps.forvalteren.domain.rs.skd.IdentType.DNR;
+import static no.nav.tps.forvalteren.domain.service.DiskresjonskoderType.UFB;
+import static no.nav.tps.forvalteren.service.command.testdata.opprett.DummyAdresseService.SPSF_ADR;
+import static no.nav.tps.forvalteren.service.command.tps.skdmelding.skdparam.utils.NullcheckUtil.nullcheckSetDefaultValue;
 
 @Service
 public class AdresseOgSpesregService {
@@ -50,7 +49,7 @@ public class AdresseOgSpesregService {
             person.setSpesreg(nullcheckSetDefaultValue(person.getSpesreg(), UFB.name()));
             person.setSpesregDato(nullcheckSetDefaultValue(person.getSpesregDato(), hentDatoFraIdentService.extract(person.getIdent())));
 
-        } else if (person.getBoadresse().isEmpty()) {
+        } else if (person.getBoadresse().isEmpty() && !person.isUtenlandskadresse()) {
 
             person.getBoadresse().add(dummyAdresseService.createDummyBoAdresse(person));
             person.setSpesregDato(null);

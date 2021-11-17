@@ -1,22 +1,21 @@
 package no.nav.tps.forvalteren.domain.rs;
 
-import static java.util.Objects.isNull;
-import static org.apache.commons.lang3.BooleanUtils.isTrue;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import no.nav.tps.forvalteren.domain.rs.skd.KjoennType;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import static java.util.Objects.isNull;
+import static org.apache.commons.lang3.BooleanUtils.isTrue;
 
 @Getter
 @Setter
@@ -58,6 +57,8 @@ public class RsSimplePersonRequest {
     protected LocalDateTime egenAnsattDatoTom;
 
     protected boolean utenFastBopel;
+
+    protected Boolean harUtenlandskadresse;
 
     protected RsRequestAdresse boadresse;
 
