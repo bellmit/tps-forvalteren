@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
@@ -58,6 +57,8 @@ public class RsSimplePersonRequest {
     protected LocalDateTime egenAnsattDatoTom;
 
     protected boolean utenFastBopel;
+
+    protected Boolean harIngenAdresse;
 
     protected RsRequestAdresse boadresse;
 
@@ -139,5 +140,10 @@ public class RsSimplePersonRequest {
     @JsonIgnore
     public boolean hasNyttNavn() {
         return isTrue(getHarNyttNavn());
+    }
+
+    @JsonIgnore
+    public boolean isIngenAdresse() {
+        return isTrue(harIngenAdresse);
     }
 }

@@ -1,16 +1,12 @@
 package no.nav.tps.forvalteren.domain.jpa;
 
-import static java.util.Objects.isNull;
-import static java.util.Objects.nonNull;
-import static javax.persistence.CascadeType.ALL;
-import static no.nav.tps.forvalteren.domain.jpa.InnvandretUtvandret.InnUtvandret.INNVANDRET;
-import static no.nav.tps.forvalteren.domain.jpa.InnvandretUtvandret.InnUtvandret.UTVANDRET;
-import static org.apache.commons.lang3.BooleanUtils.isTrue;
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import no.nav.tps.forvalteren.domain.jpa.embedded.ChangeStamp;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -25,14 +21,17 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import no.nav.tps.forvalteren.domain.jpa.embedded.ChangeStamp;
+import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
+import static javax.persistence.CascadeType.ALL;
+import static no.nav.tps.forvalteren.domain.jpa.InnvandretUtvandret.InnUtvandret.INNVANDRET;
+import static no.nav.tps.forvalteren.domain.jpa.InnvandretUtvandret.InnUtvandret.UTVANDRET;
+import static org.apache.commons.lang3.BooleanUtils.isTrue;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @Entity
 @Data

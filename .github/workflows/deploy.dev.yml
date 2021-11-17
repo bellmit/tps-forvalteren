@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - feature/uten-generert-adresse
 
 env:
   IMAGE: docker.pkg.github.com/${{ github.repository }}/tps-forvalteren:${{ github.sha }}

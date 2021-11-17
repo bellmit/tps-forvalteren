@@ -237,7 +237,7 @@ public class PersonKriteriumMappingStrategy implements MappingStrategy {
 
         if (DNR.name().equals(person.getIdenttype())) {
             person.setBoadresse(null);
-            if (kriteriumRequest.getPostadresse().isEmpty()) {
+            if (kriteriumRequest.getPostadresse().isEmpty() && !kriteriumRequest.isIngenAdresse()) {
                 person.getPostadresse().clear();
                 person.getPostadresse().add(dummyAdresseService.createDummyPostAdresseUtland(person));
             }
@@ -277,13 +277,13 @@ public class PersonKriteriumMappingStrategy implements MappingStrategy {
     private static IdentpoolKjoenn extractKjoenn(KjoennType kjoenn) {
 
         switch (kjoenn) {
-        case K:
-            return KVINNE;
-        case M:
-            return MANN;
-        case U:
-        default:
-            return null;
+            case K:
+                return KVINNE;
+            case M:
+                return MANN;
+            case U:
+            default:
+                return null;
         }
     }
 

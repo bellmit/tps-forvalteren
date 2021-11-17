@@ -71,7 +71,7 @@ public class ExtractOpprettKriterier {
         }
         mapperFacade.map(req, hovedPerson);
 
-        if (isNull(req.getBoadresse()) || !req.getBoadresse().isValidAdresse()) {
+        if ((isNull(req.getBoadresse()) || !req.getBoadresse().isValidAdresse()) && !req.isIngenAdresse()) {
             mapBoadresse(hovedPerson, getBoadresse(adresser, 0), extractFlyttedato(req.getBoadresse()),
                     nonNull(req.getBoadresse()) ? req.getBoadresse().getGyldigTilDato() : null,
                     extractTilleggsadresse(req.getBoadresse()), null);
@@ -103,7 +103,9 @@ public class ExtractOpprettKriterier {
                             !partnerRequest.getPostadresse().isEmpty() ? partnerRequest.getPostadresse() : req.getPostadresse(),
                             RsPostadresse.class));
             mapperFacade.map(partnerRequest, partnere.get(i));
-            mapPartnerAdresse(hovedPerson, partnere.get(i), getBoadresse(adresser, 1 + i), partnerRequest);
+            if (!req.isIngenAdresse()) {
+                mapPartnerAdresse(hovedPerson, partnere.get(i), getBoadresse(adresser, 1 + i), partnerRequest);
+            }
             alignStatsborgerskapAndInnvandretFraLand(partnere.get(i), hovedPerson);
         }
     }
@@ -156,7 +158,9 @@ public class ExtractOpprettKriterier {
                     !barnRequest.getPostadresse().isEmpty() ? barnRequest.getPostadresse() : req.getPostadresse(),
                     RsPostadresse.class));
             mapperFacade.map(barnRequest, barn.get(i));
-            mapBarnAdresse(hovedPerson, getPartner(partnere, barn, barnRequest), barn.get(i), barnRequest);
+            if (!req.isIngenAdresse()) {
+                mapBarnAdresse(hovedPerson, getPartner(partnere, barn, barnRequest), barn.get(i), barnRequest);
+            }
             alignStatsborgerskapAndInnvandretFraLand(barn.get(i), hovedPerson);
             barn.get(i).setSivilstand(null);
         }
