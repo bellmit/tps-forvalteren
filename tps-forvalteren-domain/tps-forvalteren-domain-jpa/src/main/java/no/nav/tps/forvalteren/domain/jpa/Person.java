@@ -209,9 +209,6 @@ public class Person extends ChangeStamp {
     private String importFra;
 
     @Transient
-    private Boolean harUtenlandskadresse;
-
-    @Transient
     private String replacedByIdent;
 
     @Transient
@@ -333,12 +330,6 @@ public class Person extends ChangeStamp {
     public boolean isUtenFastBopel() {
         return isTrue(utenFastBopel) || "UFB".equals(getSpesreg());
     }
-
-    @JsonIgnore
-    public boolean isUtenlandskadresse() {
-        return isTrue(harUtenlandskadresse);
-    }
-
 
     @JsonIgnore
     public boolean isKode6() {
