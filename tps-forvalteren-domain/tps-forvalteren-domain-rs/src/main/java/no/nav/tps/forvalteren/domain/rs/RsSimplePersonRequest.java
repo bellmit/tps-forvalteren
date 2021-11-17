@@ -58,7 +58,7 @@ public class RsSimplePersonRequest {
 
     protected boolean utenFastBopel;
 
-    protected Boolean isIngenAdresse;
+    protected Boolean harIngenAdresse;
 
     protected RsRequestAdresse boadresse;
 
@@ -144,6 +144,6 @@ public class RsSimplePersonRequest {
 
     @JsonIgnore
     public boolean isIngenAdresse() {
-        return isTrue(isIngenAdresse);
+        return isTrue(harIngenAdresse);
     }
 }
