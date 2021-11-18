@@ -63,7 +63,7 @@ public class PersonKriteriumMappingStrategy implements MappingStrategy {
                             @Override
                             public void mapAtoB(RsPersonBestillingKriteriumRequest kriteriumRequest, Person person, MappingContext context) {
 
-                                person.setSikkerhetTiltakDatoFom(nullcheckSetDefaultValue(kriteriumRequest.getSikkerhetTiltakDatoFom(), now()));
+                                mapSikkerhetstiltak(kriteriumRequest, person);
                             }
                         })
                 .exclude("regdato")
@@ -78,6 +78,10 @@ public class PersonKriteriumMappingStrategy implements MappingStrategy {
                 .exclude("relasjoner")
                 .exclude("vergemaal")
                 .exclude("fullmakt")
+                .exclude("typeSikkerhetTiltak")
+                .exclude("sikkerhetTiltakDatoFom")
+                .exclude("sikkerhetTiltakDatoTom")
+                .exclude("beskrSikkerhetTiltak")
                 .byDefault()
                 .register();
 
@@ -129,6 +133,16 @@ public class PersonKriteriumMappingStrategy implements MappingStrategy {
                 .register();
     }
 
+    private void mapSikkerhetstiltak(RsPersonBestillingKriteriumRequest kriteriumRequest, Person person) {
+
+        if (isNotBlank(kriteriumRequest.getTypeSikkerhetTiltak())) {
+            person.setTypeSikkerhetTiltak(kriteriumRequest.getTypeSikkerhetTiltak());
+            person.setSikkerhetTiltakDatoFom(kriteriumRequest.getSikkerhetTiltakDatoFom());
+            person.setSikkerhetTiltakDatoTom(kriteriumRequest.getSikkerhetTiltakDatoTom());
+            person.setBeskrSikkerhetTiltak(kriteriumRequest.getBeskrSikkerhetTiltak());
+        }
+    }
+
     private void mapBasicProperties(RsSimplePersonRequest kriteriumRequest, Person person) {
 
         person.setIdenttype(nullcheckSetDefaultValue(person.getIdenttype(), "FNR"));
@@ -170,6 +184,7 @@ public class PersonKriteriumMappingStrategy implements MappingStrategy {
             person.setBankkontonr(kontonrGeneratorService.generateNumber());
             person.setBankkontonrRegdato(nullcheckSetDefaultValue(kriteriumRequest.getBankkontonrRegdato(), LocalDateTime.now()));
         }
+
         person.setGtVerdi(null);
     }
 
@@ -277,13 +292,13 @@ public class PersonKriteriumMappingStrategy implements MappingStrategy {
     private static IdentpoolKjoenn extractKjoenn(KjoennType kjoenn) {
 
         switch (kjoenn) {
-            case K:
-                return KVINNE;
-            case M:
-                return MANN;
-            case U:
-            default:
-                return null;
+        case K:
+            return KVINNE;
+        case M:
+            return MANN;
+        case U:
+        default:
+            return null;
         }
     }
 
