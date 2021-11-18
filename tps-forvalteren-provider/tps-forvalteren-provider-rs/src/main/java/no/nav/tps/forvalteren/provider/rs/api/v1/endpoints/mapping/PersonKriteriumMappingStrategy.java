@@ -242,7 +242,7 @@ public class PersonKriteriumMappingStrategy implements MappingStrategy {
                 person.getPostadresse().add(dummyAdresseService.createDummyPostAdresseUtland(person));
             }
 
-        } else if (isNotBlank(kriteriumRequest.getUtvandretTilLand())) {
+        } else if (isNotBlank(kriteriumRequest.getUtvandretTilLand()) && !kriteriumRequest.isIngenAdresse()) {
             if (person.getPostadresse().isEmpty() || "NOR".equals(person.getPostadresse().get(0).getPostLand())) {
                 person.getPostadresse().add(dummyAdresseService.createPostAdresseUtvandret(person));
             }
