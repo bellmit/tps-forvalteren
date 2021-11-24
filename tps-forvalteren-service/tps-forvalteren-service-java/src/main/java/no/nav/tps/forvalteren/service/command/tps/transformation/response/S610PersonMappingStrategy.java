@@ -1,5 +1,17 @@
 package no.nav.tps.forvalteren.service.command.tps.transformation.response;
 
+import static java.lang.String.format;
+import static java.util.Objects.nonNull;
+import static no.nav.tps.forvalteren.domain.rs.MidlertidigAdressetype.PBOX;
+import static no.nav.tps.forvalteren.domain.rs.MidlertidigAdressetype.STED;
+import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Component;
+
 import ma.glasnost.orika.CustomMapper;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.MappingContext;
@@ -23,18 +35,6 @@ import no.nav.tps.forvalteren.domain.jpa.MidlertidigAdresse.MidlertidigUtadAdres
 import no.nav.tps.forvalteren.domain.jpa.Person;
 import no.nav.tps.forvalteren.domain.jpa.Postadresse;
 import no.nav.tps.forvalteren.domain.jpa.Statsborgerskap;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Component;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
-import static java.lang.String.format;
-import static java.util.Objects.nonNull;
-import static no.nav.tps.forvalteren.domain.rs.MidlertidigAdressetype.PBOX;
-import static no.nav.tps.forvalteren.domain.rs.MidlertidigAdressetype.STED;
-import static org.apache.commons.lang3.StringUtils.isBlank;
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @Component
 public class S610PersonMappingStrategy implements MappingStrategy {
@@ -85,7 +85,8 @@ public class S610PersonMappingStrategy implements MappingStrategy {
                         person.setTelefonLandskode_2(getTlfnrLandskode(tpsPerson.getBruker().getTelefoner(), HJEM));
                         person.setTelefonnummer_2(getTelefonnr(tpsPerson.getBruker().getTelefoner(), HJEM));
                         fixTelefonnr(person);
-                        person.setPersonStatus(tpsPerson.getPersonstatusDetalj().getKodePersonstatus().name());
+                        person.setPersonStatus(nonNull(tpsPerson.getPersonstatusDetalj()) && nonNull(tpsPerson.getPersonstatusDetalj().getKodePersonstatus()) ?
+                                tpsPerson.getPersonstatusDetalj().getKodePersonstatus().name() : null);
                         person.setBeskrSikkerhetTiltak(tpsPerson.getBruker().getSikkerhetsTiltak().getBeskrSikkerhetsTiltak());
                         person.setTypeSikkerhetTiltak(tpsPerson.getBruker().getSikkerhetsTiltak().getTypeSikkerhetsTiltak());
                         person.setSikkerhetTiltakDatoFom(getTimestamp(tpsPerson.getBruker().getSikkerhetsTiltak().getSikrFom()));
