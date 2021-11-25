@@ -2,7 +2,6 @@ package no.nav.tps.forvalteren.service.command.testdata.restreq;
 
 import static com.google.common.collect.Lists.partition;
 import static java.util.Collections.singletonList;
-import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static no.nav.tps.forvalteren.domain.jpa.InnvandretUtvandret.InnUtvandret.UTVANDRET;
 import static no.nav.tps.forvalteren.service.command.testdata.utils.TestdataConstants.ORACLE_MAX_IN_SET_ELEMENTS;
@@ -55,9 +54,7 @@ public class PersonService {
                 .collect(Collectors.toList());
 
         personer.forEach(person -> {
-            if (isNull(person.getPersonStatus())) {
-                person.setPersonStatus(getPersonStatus(person));
-            }
+            person.setPersonStatus(getPersonStatus(person));
         });
 
         return personer;
@@ -136,27 +133,27 @@ public class PersonService {
         return includeRelatedPeople ?
 
                 Stream.of(
-                        persons,
-                        persons.stream()
-                                .map(Person::getRelasjoner)
-                                .flatMap(Collection::stream)
-                                .map(Relasjon::getPersonRelasjonMed)
-                                .collect(Collectors.toSet()),
-                        persons.stream()
-                                .map(Person::getIdentHistorikk)
-                                .flatMap(Collection::stream)
-                                .map(IdentHistorikk::getAliasPerson)
-                                .collect(Collectors.toSet()),
-                        persons.stream()
-                                .map(Person::getFullmakt)
-                                .flatMap(Collection::stream)
-                                .map(Fullmakt::getFullmektig)
-                                .collect(Collectors.toSet()),
-                        persons.stream()
-                                .map(Person::getVergemaal)
-                                .flatMap(Collection::stream)
-                                .map(Vergemaal::getVerge)
-                                .collect(Collectors.toSet()))
+                                persons,
+                                persons.stream()
+                                        .map(Person::getRelasjoner)
+                                        .flatMap(Collection::stream)
+                                        .map(Relasjon::getPersonRelasjonMed)
+                                        .collect(Collectors.toSet()),
+                                persons.stream()
+                                        .map(Person::getIdentHistorikk)
+                                        .flatMap(Collection::stream)
+                                        .map(IdentHistorikk::getAliasPerson)
+                                        .collect(Collectors.toSet()),
+                                persons.stream()
+                                        .map(Person::getFullmakt)
+                                        .flatMap(Collection::stream)
+                                        .map(Fullmakt::getFullmektig)
+                                        .collect(Collectors.toSet()),
+                                persons.stream()
+                                        .map(Person::getVergemaal)
+                                        .flatMap(Collection::stream)
+                                        .map(Vergemaal::getVerge)
+                                        .collect(Collectors.toSet()))
                         .flatMap(Collection::stream)
                         .collect(Collectors.toSet()) :
 
