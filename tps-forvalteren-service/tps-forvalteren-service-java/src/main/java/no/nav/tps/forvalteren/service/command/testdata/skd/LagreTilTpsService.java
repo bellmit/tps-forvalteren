@@ -106,7 +106,7 @@ public class LagreTilTpsService {
             var synthMiljoer = Map.of("q4", "OK");
 
             skdMldResponse.add(SendSkdMeldingTilTpsResponse.builder()
-                            .personId(personerIGruppen.get(0).getIdent())
+                            .personId(personerIGruppen.stream().findFirst().orElse(new Person()).getIdent())
                             .skdmeldingstype("TPS i dette miljø blir nå oppdatert via PDL")
                             .status(synthMiljoer)
                             .build());
