@@ -154,9 +154,11 @@ public class PersonKriteriumMappingStrategy implements MappingStrategy {
 
         mapStatsborgerskap(kriteriumRequest, person);
 
-        person.setSprakKode(nullcheckSetDefaultValue(kriteriumRequest.getSprakKode(), DNR.name().equals(person.getIdenttype()) ? dummyLanguageService.getRandomLanguage() : "NB"));
-        person.setDatoSprak(nullcheckSetDefaultValue(kriteriumRequest.getDatoSprak(),
-                hentDatoFraIdentService.extract(person.getIdent())));
+        if (isNotBlank(kriteriumRequest.getSprakKode())) {
+            person.setSprakKode(kriteriumRequest.getSprakKode());
+            person.setDatoSprak(nullcheckSetDefaultValue(kriteriumRequest.getDatoSprak(),
+                    hentDatoFraIdentService.extract(person.getIdent())));
+        }
 
         if (FNR.name().equals(person.getIdenttype()) && (isNotBlank(kriteriumRequest.getSpesreg()) || kriteriumRequest.isUtenFastBopel())) {
             if ("UGRADERT".equals(kriteriumRequest.getSpesreg())) {
