@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Set;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -55,7 +55,8 @@ import no.nav.tps.forvalteren.service.command.tps.skdmelding.TpsPersonService;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "api/v1/endringsmelding/skd")
-@PreAuthorize("hasRole('ROLE_TPSF_SKDMELDING')")
+//@PreAuthorize("hasRole('ROLE_TPSF_SKDMELDING')")
+@ConditionalOnProperty(prefix = "tps.forvalteren", name = "production.mode", havingValue = "false")
 public class SkdEndringsmeldingController {
 
     private static final String REST_SERVICE_NAME = "testdata";
