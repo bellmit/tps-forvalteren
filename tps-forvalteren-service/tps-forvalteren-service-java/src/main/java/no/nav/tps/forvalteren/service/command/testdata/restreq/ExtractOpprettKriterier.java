@@ -63,13 +63,15 @@ public class ExtractOpprettKriterier {
         List<Adresse> adresser = getAdresser(1 + partnere.size() + foreldre.size(), req.getAdresseNrInfo());
         ammendBolignr(adresser, req);
 
-        if (isBlank(req.getInnvandretFraLand()) && !"NOR".equals(req.getStatsborgerskap())) {
+        mapperFacade.map(req, hovedPerson);
+
+        if (isBlank(req.getInnvandretFraLand()) && !"NOR".equals(hovedPerson.getStatsborgerskap().stream()
+                .findFirst().orElse(new Statsborgerskap()).getStatsborgerskap())) {
 
             req.setInnvandretFraLand(isNotBlank(req.getStatsborgerskap()) ?
                     req.getStatsborgerskap() :
                     landkodeEncoder.getRandomLandTla());
         }
-        mapperFacade.map(req, hovedPerson);
 
         if ((isNull(req.getBoadresse()) || !req.getBoadresse().isValidAdresse()) && !req.isIngenAdresse()) {
             mapBoadresse(hovedPerson, getBoadresse(adresser, 0), extractFlyttedato(req.getBoadresse()),

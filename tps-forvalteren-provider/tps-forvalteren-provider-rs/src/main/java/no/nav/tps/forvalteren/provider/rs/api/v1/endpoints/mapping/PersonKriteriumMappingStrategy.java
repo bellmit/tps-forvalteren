@@ -37,7 +37,6 @@ import no.nav.tps.forvalteren.domain.rs.RsSimplePersonRequest;
 import no.nav.tps.forvalteren.domain.rs.dolly.RsPersonBestillingKriteriumRequest;
 import no.nav.tps.forvalteren.domain.rs.skd.KjoennType;
 import no.nav.tps.forvalteren.service.command.testdata.opprett.DummyAdresseService;
-import no.nav.tps.forvalteren.service.command.testdata.opprett.DummyLanguageService;
 import no.nav.tps.forvalteren.service.command.testdata.opprett.KontonrGeneratorService;
 import no.nav.tps.forvalteren.service.command.testdata.opprett.PersonNameService;
 import no.nav.tps.forvalteren.service.command.testdata.utils.HentDatoFraIdentService;
@@ -51,7 +50,6 @@ public class PersonKriteriumMappingStrategy implements MappingStrategy {
 
     private final HentDatoFraIdentService hentDatoFraIdentService;
     private final DummyAdresseService dummyAdresseService;
-    private final DummyLanguageService dummyLanguageService;
     private final KontonrGeneratorService kontonrGeneratorService;
     private final LandkodeEncoder landkodeEncoder;
 

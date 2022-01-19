@@ -20,7 +20,6 @@ import no.nav.tps.forvalteren.domain.jpa.Person;
 import no.nav.tps.forvalteren.domain.rs.dolly.RsPersonBestillingKriteriumRequest;
 import no.nav.tps.forvalteren.provider.rs.util.MapperTestUtils;
 import no.nav.tps.forvalteren.service.command.testdata.opprett.DummyAdresseService;
-import no.nav.tps.forvalteren.service.command.testdata.opprett.DummyLanguageService;
 import no.nav.tps.forvalteren.service.command.testdata.utils.HentDatoFraIdentService;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -41,9 +40,6 @@ public class PersonKriteriumMappingStrategyTest {
 
     @Mock
     private HentDatoFraIdentService hentDatoFraIdentService;
-
-    @Mock
-    private DummyLanguageService dummyLanguageService;
 
     @InjectMocks
     private PersonKriteriumMappingStrategy personKriteriumMappingStrategy;
