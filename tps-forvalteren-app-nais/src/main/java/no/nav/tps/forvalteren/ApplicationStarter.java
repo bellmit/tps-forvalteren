@@ -32,5 +32,4 @@ public class ApplicationStarter {
                 .properties(properties)
                 .run(args);
     }
-
 }
