@@ -73,7 +73,8 @@ public class ExtractOpprettKriterier {
                     landkodeEncoder.getRandomLandTla());
         }
 
-        if ((isNull(req.getBoadresse()) || !req.getBoadresse().isValidAdresse()) && !req.isIngenAdresse()) {
+        if ("FNR".equals(hovedPerson.getIdenttype()) && !req.isIngenAdresse() &&
+                (isNull(req.getBoadresse()) || !req.getBoadresse().isValidAdresse())) {
             mapBoadresse(hovedPerson, getBoadresse(adresser, 0), extractFlyttedato(req.getBoadresse()),
                     nonNull(req.getBoadresse()) ? req.getBoadresse().getGyldigTilDato() : null,
                     extractTilleggsadresse(req.getBoadresse()), null);
