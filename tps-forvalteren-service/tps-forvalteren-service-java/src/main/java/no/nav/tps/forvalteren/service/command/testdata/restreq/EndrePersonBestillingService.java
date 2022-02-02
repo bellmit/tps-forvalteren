@@ -34,7 +34,6 @@ import no.nav.tps.forvalteren.service.command.exceptions.TpsfTechnicalException;
 import no.nav.tps.forvalteren.service.command.testdata.opprett.OpprettPersonerOgSjekkMiljoeService;
 import no.nav.tps.forvalteren.service.command.testdata.opprett.PersonNameService;
 import no.nav.tps.forvalteren.service.command.testdata.opprett.RandomAdresseService;
-import no.nav.tps.forvalteren.service.command.testdata.utils.HentDatoFraIdentService;
 import no.nav.tps.forvalteren.service.command.testdata.utils.HentKjoennFraIdentService;
 
 @Service
@@ -44,7 +43,6 @@ public class EndrePersonBestillingService {
     private final PersonRepository personRepository;
     private final RandomAdresseService randomAdresseService;
     private final RelasjonNyePersonerBestillingService relasjonNyePersonerBestillingService;
-    private final HentDatoFraIdentService hentDatoFraIdentService;
     private final MapperFacade mapperFacade;
     private final MessageProvider messageProvider;
     private final OpprettPersonerOgSjekkMiljoeService opprettPersonerOgSjekkMiljoeService;

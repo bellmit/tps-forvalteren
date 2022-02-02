@@ -22,15 +22,12 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import ma.glasnost.orika.MapperFacade;
 import no.nav.tps.forvalteren.common.message.MessageProvider;
-import no.nav.tps.forvalteren.domain.jpa.Gateadresse;
 import no.nav.tps.forvalteren.domain.jpa.InnvandretUtvandret;
 import no.nav.tps.forvalteren.domain.jpa.Person;
 import no.nav.tps.forvalteren.domain.jpa.Statsborgerskap;
 import no.nav.tps.forvalteren.domain.rs.dolly.RsPersonBestillingKriteriumRequest;
 import no.nav.tps.forvalteren.repository.jpa.PersonRepository;
 import no.nav.tps.forvalteren.service.command.exceptions.TpsfFunctionalException;
-import no.nav.tps.forvalteren.service.command.testdata.opprett.RandomAdresseService;
-import no.nav.tps.forvalteren.service.command.testdata.utils.HentDatoFraIdentService;
 
 @RunWith(MockitoJUnitRunner.class)
 public class EndrePersonBestillingServiceTest {
@@ -52,12 +49,6 @@ public class EndrePersonBestillingServiceTest {
 
     @Mock
     private MapperFacade mapperFacade;
-
-    @Mock
-    private RandomAdresseService randomAdresseService;
-
-    @Mock
-    private HentDatoFraIdentService hentDatoFraIdentService;
 
     @InjectMocks
     private EndrePersonBestillingService endrePersonBestillingService;
@@ -132,7 +123,6 @@ public class EndrePersonBestillingServiceTest {
                 .identtype(IDENTTYPE)
                 .build();
         when(personRepository.findByIdent(IDENT)).thenReturn(person);
-        when(randomAdresseService.hentRandomAdresse(1, null)).thenReturn(singletonList(Gateadresse.builder().build()));
 
         RsPersonBestillingKriteriumRequest request = new RsPersonBestillingKriteriumRequest();
 
