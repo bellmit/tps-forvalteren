@@ -188,22 +188,7 @@ public class EndrePersonBestillingService {
                 boAdresse.setFlyttedato(now().minusYears(1));
                 setAdresseGyldigTilDato(request, boAdresse);
             }
-        }
-
-        person.setGtVerdi(null); // Triggers reload of TKNR
-
-        if (person.isForsvunnet()) {
-            return;
-        }
-
-        Adresse adresse = person.getBoadresse().isEmpty()
-                ? randomAdresseService.hentRandomAdresse(1, null).get(0)
-                : person.getBoadresse().get(0);
-        adresse.setFlyttedato(hentDatoFraIdentService.extract(person.getIdent()));
-        setAdresseGyldigTilDato(request, adresse);
-
-        if (person.getBoadresse().isEmpty()) {
-            setAdressePaaPerson(person, adresse);
+            person.setGtVerdi(null); // Triggers reload of TKNR
         }
     }
 
