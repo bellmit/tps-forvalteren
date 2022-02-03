@@ -146,7 +146,7 @@ public class PersonKriteriumMappingStrategy implements MappingStrategy {
         person.setIdenttype(nullcheckSetDefaultValue(person.getIdenttype(), "FNR"));
         person.setKjonn(nullcheckSetDefaultValue(person.getKjonn(), "U"));
         person.setRegdato(nullcheckSetDefaultValue(person.getRegdato(), now()));
-        person.setDoedsdato(kriteriumRequest.getDoedsdato());
+        person.setDoedsdato(nonNull(person.getDoedsdato()) ? person.getDoedsdato() : kriteriumRequest.getDoedsdato());
 
         mapMellomnavn(kriteriumRequest, person);
 
