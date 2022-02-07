@@ -95,7 +95,7 @@ public abstract class InnvandringSkdParameterStrategy implements SkdParametersSt
         skdMeldingTrans1.setAarsakskode(AARSAK_KO_DE_FOR_INNVANDRING);
         skdMeldingTrans1.setTranstype(TRANSTYPE_1);
 
-        skdMeldingTrans1.setPersonkode(!person.getBoadresse().isEmpty() ? "1" : "7");
-        skdMeldingTrans1.setStatuskode("1");
+        skdMeldingTrans1.setPersonkode("1");
+        skdMeldingTrans1.setStatuskode(!person.getBoadresse().isEmpty() ? "1" : "7");
     }
 }
