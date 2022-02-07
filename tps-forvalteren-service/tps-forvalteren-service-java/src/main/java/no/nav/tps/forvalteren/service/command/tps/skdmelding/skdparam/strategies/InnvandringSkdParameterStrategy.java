@@ -37,7 +37,7 @@ public abstract class InnvandringSkdParameterStrategy implements SkdParametersSt
         SkdMeldingTrans1 skdMeldingTrans1 = SkdMeldingTrans1.builder().tildelingskode(hentTildelingskode()).build();
 
         addSkdParametersExtractedFromPerson(skdMeldingTrans1, person);
-        addDefaultParam(skdMeldingTrans1);
+        addDefaultParam(skdMeldingTrans1, person);
 
         return skdMeldingTrans1;
     }
@@ -90,12 +90,12 @@ public abstract class InnvandringSkdParameterStrategy implements SkdParametersSt
                 person.getStatsborgerskap().get(person.getStatsborgerskap().size() - 1).getStatsborgerskapRegdato();
     }
 
-    private static void addDefaultParam(SkdMeldingTrans1 skdMeldingTrans1) {
+    private static void addDefaultParam(SkdMeldingTrans1 skdMeldingTrans1, Person person) {
 
         skdMeldingTrans1.setAarsakskode(AARSAK_KO_DE_FOR_INNVANDRING);
         skdMeldingTrans1.setTranstype(TRANSTYPE_1);
 
-        skdMeldingTrans1.setPersonkode("1");
+        skdMeldingTrans1.setPersonkode(!person.getBoadresse().isEmpty() ? "1" : "7");
         skdMeldingTrans1.setStatuskode("1");
     }
 }
