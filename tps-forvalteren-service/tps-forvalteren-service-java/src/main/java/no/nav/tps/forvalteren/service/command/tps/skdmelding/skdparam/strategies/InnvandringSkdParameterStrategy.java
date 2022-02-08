@@ -1,5 +1,6 @@
 package no.nav.tps.forvalteren.service.command.tps.skdmelding.skdparam.strategies;
 
+import static no.nav.tps.forvalteren.domain.rs.skd.IdentType.FNR;
 import static no.nav.tps.forvalteren.domain.service.tps.config.SkdConstants.TRANSTYPE_1;
 import static no.nav.tps.forvalteren.service.command.testdata.utils.HentDatoFraIdentService.enforceValidTpsDate;
 import static no.nav.tps.forvalteren.service.command.tps.skdmelding.skdparam.utils.NullcheckUtil.nullcheckSetDefaultValue;
@@ -9,8 +10,8 @@ import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import no.nav.tps.forvalteren.domain.jpa.Person;
-import no.nav.tps.forvalteren.domain.service.DiskresjonskoderType;
 import no.nav.tps.forvalteren.domain.jpa.Sivilstatus;
+import no.nav.tps.forvalteren.domain.service.DiskresjonskoderType;
 import no.nav.tps.forvalteren.service.command.testdata.skd.SkdMeldingTrans1;
 import no.nav.tps.forvalteren.service.command.testdata.utils.HentDatoFraIdentService;
 import no.nav.tps.forvalteren.service.command.tps.skdmelding.skdparam.SkdParametersStrategy;
@@ -96,6 +97,17 @@ public abstract class InnvandringSkdParameterStrategy implements SkdParametersSt
         skdMeldingTrans1.setTranstype(TRANSTYPE_1);
 
         skdMeldingTrans1.setPersonkode("1");
-        skdMeldingTrans1.setStatuskode(!person.getBoadresse().isEmpty() ? "1" : "7");
+        skdMeldingTrans1.setStatuskode(getStatuskode(person));
+    }
+
+    private static String getStatuskode(Person person) {
+
+        if (!FNR.name().equals(person.getIdenttype())) {
+            return "1";
+        } else if (person.getBoadresse().isEmpty()) {
+            return "7";
+        } else {
+            return "1";
+        }
     }
 }
