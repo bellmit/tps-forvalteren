@@ -1,5 +1,7 @@
 package no.nav.tps.forvalteren.domain.jpa;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -130,5 +132,25 @@ public class MidlertidigAdresse {
 
         @Column(name = "POST_LAND", length = 3)
         private String postLand;
+
+        public void setPostLinje1(String postLinje1) {
+            this.postLinje1 = MidlertidigAdresse.truncLen(postLinje1);
+        }
+
+        public void setPostLinje2(String postLinje2) {
+            this.postLinje2 = MidlertidigAdresse.truncLen(postLinje2);
+        }
+
+        public void setPostLinje3(String postLinje3) {
+            this.postLinje3 = MidlertidigAdresse.truncLen(postLinje3);
+        }
+    }
+
+    private static String truncLen(String adresse) {
+
+        if (isBlank(adresse)) {
+            return null;
+        }
+        return adresse.length() > 30 ? adresse.substring(0, 30) : adresse;
     }
 }
