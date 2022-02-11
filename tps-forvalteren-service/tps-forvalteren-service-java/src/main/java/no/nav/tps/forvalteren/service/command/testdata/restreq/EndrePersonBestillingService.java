@@ -140,7 +140,7 @@ public class EndrePersonBestillingService {
 
     private void validateStatsborgerskap(RsPersonBestillingKriteriumRequest request, Person person) {
 
-        if (nonNull(request.getStatsborgerskap()) &&
+        if (isNotBlank(request.getStatsborgerskap()) &&
                 person.getStatsborgerskap().stream().map(Statsborgerskap::getStatsborgerskap)
                         .anyMatch(stsbs -> stsbs.equals(request.getStatsborgerskap()))) {
             throw new TpsfFunctionalException(messageProvider.get("endre.person.statsborgerskap.validation.eksisterer.allerede",
@@ -150,7 +150,7 @@ public class EndrePersonBestillingService {
 
     private void validateInnvandretUtvandret(RsPersonBestillingKriteriumRequest request, Person person) {
 
-        if (nonNull(request.getUtvandretTilLand()) && !FNR.name().equals(person.getIdenttype())) {
+        if (isNotBlank(request.getUtvandretTilLand()) && !FNR.name().equals(person.getIdenttype())) {
             throw new TpsfFunctionalException(messageProvider.get("endre.person.innutvandring.validation.identtype"));
         }
 
